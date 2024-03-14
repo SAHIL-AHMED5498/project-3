@@ -179,7 +179,7 @@ button.addEventListener("click", function () {
 
     targetInput.value = targetSalary;
     
-    message.innerHTML = `equivalent salary for targetCountry is ${targetSalary}`;
+    message.innerHTML = `Equivalent salary to have same living standard as source-country is : ${targetSalary}`;
     
     
 
