@@ -1,0 +1,111 @@
+body{
+    height: 100vh;
+    width: 100vw;
+    background-color: #e0dede;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    justify-content: space-around;
+    align-items: center;
+}
+
+h1{
+    text-decoration: underline;
+    font-family: cursive;
+    margin: 0;
+    font-size: 25px;
+}
+
+.container{
+    
+    height: 22rem;
+    width: 16rem;
+    background-color: #60dab9;;
+    border-radius: 20px;
+    border: 5px solid black;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+    
+}
+
+.target-box{
+    height: 6rem;
+    width: 14rem;
+    background-color: #f1d09d;
+    border: 2px solid orange;
+    border-radius: 15px;
+}
+
+.source-box{
+    height: 6rem;
+    width: 14rem;
+    background-color: #f1d09d;
+    border: 2px solid orange;
+    border-radius: 15px;
+}
+
+.dropdown{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin: 5px;
+}
+.sel-drop-down-img{
+    background-color: #876767;
+    height: 14px;
+    width: 28px;
+    margin-left: 2px;
+    border-radius: 4px;
+    border: 2px solid orange;
+}
+
+.select{
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    font-family: cursive;
+    font-weight: 500;
+}
+
+#source-img {
+    display: flex;
+    background-image: url(https://flagsapi.com/#/flat/64.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    justify-content: center;
+    align-items: center;
+    width: 15px;
+}
+#target-img {
+    display: flex;
+    background-image: url(https://flagsapi.com/#/flat/64.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    justify-content: center;
+    align-items: center;
+    width: 15px;
+}
+
+.input{
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+
+
+    .message{
+        background-color: #df8383;
+        height: 2rem;
+        width: 20rem;
+        display: flex;
+    align-items: center;
+    font-size: small;
+    font-family: cursive;
+    font-weight: 500;
+    border: 1px solid orange;
+    border-radius: 5px;
+    }
+

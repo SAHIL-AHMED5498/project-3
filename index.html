@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/index.css">
+    <title>Salary-Equivalent-Calculater</title>
+</head>
+
+<body>
+
+     
+
+    <div class="container">
+        
+        <h1>Salary Equivalent</h1>
+
+        <div class="source-box">
+
+            <div class="dropdown">
+                <div class="sel-drop-down">
+                    <select class="select" name="" id="source-country">
+                        <option value="">source :</option>
+                      <option value="INR">IN</option>
+                      <option value="EUR">FR</option>
+                      <option value="USD">US</option>
+                      <option value="DE">DE</option>
+
+                    </select>
+                </div>
+                <div class="sel-drop-down-img" id="source-img"></div>
+            </div>
+
+            <div class="input-bar"> 
+             <input class="input" type="Enter amount" id="source-input">
+            </div>
+
+        </div>
+
+        <div class="target-box">
+
+            <div class="dropdown">
+                <div class="sel-drop-down">
+                    <select class="select" name="" id="target-country">
+                        <option value="">target :</option>
+                      <option value="INR">IN</option>
+                      <option value="EUR">FR</option>
+                      <option value="USD">US</option>
+                      <option value="DE">DE</option>
+
+                    </select>
+
+                </div>
+                <div class="sel-drop-down-img" id="target-img"></div>
+            </div>
+
+            <div class="input-bar" > 
+                <input class="input" type="Enter amount" id="target-input">
+            </div>
+
+        </div>
+
+       <div class="bottom-button">
+        <button id="calculate-button">Calculate</button>
+
+       </div>
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <div class="message">
+        <p id="message-box"></p>
+    </div>
+
+    <script src="./js/codes.js"></script>
+<script src="./js/index.js"></script>
+</body>
+
+</html>
