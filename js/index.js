@@ -1,212 +1,116 @@
-
 const sourceSelect = document.getElementById("source-country");
 const targetSelect = document.getElementById("target-country");
-
 const sourceImg = document.getElementById("source-img");
 const targetImg = document.getElementById("target-img");
-
 const message = document.getElementById("message-box");
-
 const button = document.getElementById("calculate-button");
 
-let sourceCountry;
-let targetCountry;
-
-
-let sourcePPP;
-let targetPPP;
-
-let sourceSalary;
-let targetSalary;
-
-
-
-
-
-
-
-
-
-
-// Get references to input elements
 const sourceInput = document.getElementById("source-input");
 const targetInput = document.getElementById("target-input");
 
-let targetvalue; //see target value declared outside 
+let sourcePPP, targetPPP;
+let sourceSalary, targetSalary;
 
-// Add event listener to source input field
-sourceInput.addEventListener("input", function () {
-    const sourceValue = parseFloat(this.value); // Convert input value to a floating point number
-    sourceSalary = sourceValue;
-    console.log("Source input value:", sourceValue);
-});
-
-// Add event listener to target input field
-targetInput.addEventListener("input", function () {
-    const targetValue = parseFloat(this.value); // Convert input value to a floating point number
-    console.log("Target input value:", targetValue);
-    targetvalue = targetValue;
-});
-
-
-// Function to add options to a select tag
-function addOptionsToSelect(selectId, options) {
-    const selectElement = document.getElementById(selectId);
-    for (const key in options) {
-        if (options.hasOwnProperty(key)) {
-            const option = document.createElement('option');
-            option.value = key;
-            option.textContent = options[key];
-            selectElement.appendChild(option);
-        }
-    }
-}
-
-// Call the function to add options to the source and target select boxes
-addOptionsToSelect('source-country', countryList);
-addOptionsToSelect('target-country', countryList);
-
-console.log(countryList);
-
-// Function to fetch and parse CSV file from GitHub
-function fetchAndParseCSV(csvFileURL) {
-    return fetch(csvFileURL)
-        .then(response => response.text())
-        .then(csvData => {
-            // Split the CSV data into rows
-            const rows = csvData.split('\n');
-            // Initialize an empty array to store parsed data
-            const data = [];
-            // Loop through rows starting from the second row (index 1)
-            for (let i = 0; i < rows.length; i++) {
-                // Split each row into values
-                const values = rows[i].split(',');
-                if (values.length === 4) { // Ensure it has expected number of columns
-                    // Extract the data
-                    const country = values[0].replace(/"/g, '').trim();
-                    const countryCode = values[1].replace(/"/g, '').trim();
-                    const year = parseInt(values[2]);
-                    const ppp = parseFloat(values[3]);
-                    // Push to the data array
-                    data.push({ country, countryCode, year, ppp });
-                }
-            }
-            return data;
-        });
-}
-
-// Function to get the PPP of the latest year for a given country code
-function getLatestPPP(data, countryCode) {
-    // Filter data for the desired country code
-    const countryData = data.filter(entry => entry.countryCode === countryCode);
-    if (countryData.length === 0) {
-        return null; // Return null if no data found for the country code
-    }
-    // Sort the filtered data by year in descending order
-    countryData.sort((a, b) => b.year - a.year);
-    // Return the PPP of the latest year
-    return countryData[0].ppp;
-}
-
-// Usage
 const githubCSVFileURL = 'https://raw.githubusercontent.com/datasets/ppp/master/data/ppp-gdp.csv';
 
-sourceSelect.addEventListener("change", function () {
-    // Get the selected value from source select
-    const sourceValue = this.value;
-    console.log("Source Value:", sourceValue);
+// Store country names & codes
+let countryDataMap = {};
 
-    const sourceText = this.options[this.selectedIndex].text;
-    console.log("Source Text:", sourceText);
-    sourceCountry = sourceText;
-    console.log(sourceCountry);
+// Fetch and parse CSV file
+async function fetchAndParseCSV(csvFileURL) {
+    const response = await fetch(csvFileURL);
+    const csvData = await response.text();
+    const rows = csvData.split('\n').slice(1); // Skip header
 
-    const countryCode = `${sourceCountry}`;
+    rows.forEach(row => {
+        const values = row.split(',');
+        if (values.length === 4) {
+            const country = values[0].replace(/"/g, '').trim();
+            const countryCode = values[1].replace(/"/g, '').trim();
+            const year = parseInt(values[2]);
+            const ppp = parseFloat(values[3]);
 
-    fetchAndParseCSV(githubCSVFileURL)
-        .then(data => {
-            const latestPPP = getLatestPPP(data, countryCode);
-            if (latestPPP !== null) {
-                console.log(`Latest PPP for ${countryCode}: ${latestPPP}`);
-                sourcePPP = latestPPP;
-            } else {
-                console.log(`No data found for country code ${countryCode}`);
+            if (!countryDataMap[country]) {
+                countryDataMap[country] = { code: countryCode, ppp: [] };
             }
-        })
-        .catch(error => console.error('Error fetching or parsing CSV:', error));
+            countryDataMap[country].ppp.push({ year, ppp });
+        }
+    });
 
+    populateCountryDropdowns();
+}
 
-    sourceImg.style.backgroundImage = `url(https://flagsapi.com/${sourceText}/flat/64.png)`;
+// Populate country dropdowns
+function populateCountryDropdowns() {
+    sourceSelect.innerHTML = '<option value="">Select source</option>';
+    targetSelect.innerHTML = '<option value="">Select target</option>';
 
+    Object.keys(countryDataMap)
+        .sort()
+        .forEach(country => addCountryToDropdown(country));
+}
+
+// Helper to add a country to dropdown
+function addCountryToDropdown(country) {
+    let option1 = document.createElement("option");
+    let option2 = document.createElement("option");
+    option1.value = country;
+    option2.value = country;
+    option1.textContent = country;
+    option2.textContent = country;
+    sourceSelect.appendChild(option1);
+    targetSelect.appendChild(option2);
+}
+
+// Get latest PPP for a given country
+function getLatestPPP(country) {
+    if (!countryDataMap[country]) return null;
+    const pppData = countryDataMap[country].ppp;
+    pppData.sort((a, b) => b.year - a.year); // Sort by latest year
+    return pppData[0].ppp;
+}
+
+// Handle selection changes
+function handleCountryChange(selectElement, imgElement, isSource) {
+    const country = selectElement.value;
+    if (!countryDataMap[country]) return;
+
+    const countryCode = countryDataMap[country].code;
+    imgElement.style.backgroundImage = `url(https://flagsapi.com/${countryCode}/flat/64.png)`;
+    imgElement.style.backgroundSize = "cover";
+    imgElement.style.backgroundPosition = "center";
+    imgElement.style.backgroundRepeat = "no-repeat";
+
+    const ppp = getLatestPPP(country);
+    if (isSource) {
+        sourcePPP = ppp;
+    } else {
+        targetPPP = ppp;
+    }
+}
+
+// Handle input
+sourceInput.addEventListener("input", function () {
+    sourceSalary = parseFloat(this.value);
 });
 
-
-// Add event listener to target select element
-targetSelect.addEventListener("change", function () {
-    // Get the selected value from target select
-    const targetValue = this.value;
-    console.log("Target Value:", targetValue);
-
-    const TargetText = this.options[this.selectedIndex].text;
-    console.log("Target Text:", TargetText);
-    targetCountry = TargetText;
-
-    const countryCode = `${targetCountry}`;
-
-    fetchAndParseCSV(githubCSVFileURL)
-        .then(data => {
-            const latestPPP = getLatestPPP(data, countryCode);
-            if (latestPPP !== null) {
-                console.log(`Latest PPP for ${countryCode}: ${latestPPP}`);
-                targetPPP = latestPPP;
-            } else {
-                console.log(`No data found for country code ${countryCode}`);
-            }
-        })
-        .catch(error => console.error('Error fetching or parsing CSV:', error));
-
-
-    targetImg.style.backgroundImage = `url(https://flagsapi.com/${TargetText}/flat/64.png)`;
-
-});
-
+// Button click event
 button.addEventListener("click", function () {
-
+    if (!sourcePPP || !targetPPP || !sourceSalary) {
+        message.innerHTML = "⚠️ Please select both countries and enter a valid salary.";
+        return;
+    }
 
     const actualPPP = targetPPP / sourcePPP;
-
     targetSalary = actualPPP * sourceSalary;
+    targetInput.value = targetSalary.toFixed(2);
 
-    targetInput.value = targetSalary;
-    
-    message.innerHTML = `Equivalent salary to have same living standard as source-country is : ${targetSalary}`;
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
+    message.innerHTML = `You require a salary of ${targetSalary.toFixed(2)} in ${targetSelect.value}'s currency to match a salary of ${sourceSalary.toFixed(2)} in ${sourceSelect.value}'s currency.`;
 });
 
+// Event Listeners
+sourceSelect.addEventListener("change", () => handleCountryChange(sourceSelect, sourceImg, true));
+targetSelect.addEventListener("change", () => handleCountryChange(targetSelect, targetImg, false));
 
-
-
-
-
-
-
-
-
-
-
-
-
+// Fetch data on load
+fetchAndParseCSV(githubCSVFileURL);

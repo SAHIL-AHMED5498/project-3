@@ -1,89 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/index.css">
-    <title>Salary-Equivalent-Calculater</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {},
+            },
+        };
+    </script>
+    <title>Salary Equivalent Calculator</title>
 </head>
-
-<body>
-
-     
-
-    <div class="container">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center text-gray-800 mb-4">Salary Equivalent</h1>
         
-        <h1>Salary Equivalent</h1>
-
-        <div class="source-box">
-
-            <div class="dropdown">
-                <div class="sel-drop-down">
-                    <select class="select" name="" id="source-country">
-                        <option value="">source :</option>
-                      <option value="INR">IN</option>
-                      <option value="EUR">FR</option>
-                      <option value="USD">US</option>
-                      <option value="DE">DE</option>
-
-                    </select>
-                </div>
-                <div class="sel-drop-down-img" id="source-img"></div>
+        <div class="mb-4">
+            <label class="block text-gray-700 font-semibold">Source Country</label>
+            <div class="flex items-center space-x-2">
+                <select id="source-country" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <option value="">Select source</option>
+                </select>
+                <div id="source-img" class="w-10 h-10 bg-gray-200 rounded-sm"></div>
             </div>
-
-            <div class="input-bar"> 
-             <input class="input" type="Enter amount" id="source-input">
-            </div>
-
         </div>
 
-        <div class="target-box">
-
-            <div class="dropdown">
-                <div class="sel-drop-down">
-                    <select class="select" name="" id="target-country">
-                        <option value="">target :</option>
-                      <option value="INR">IN</option>
-                      <option value="EUR">FR</option>
-                      <option value="USD">US</option>
-                      <option value="DE">DE</option>
-
-                    </select>
-
-                </div>
-                <div class="sel-drop-down-img" id="target-img"></div>
-            </div>
-
-            <div class="input-bar" > 
-                <input class="input" type="Enter amount" id="target-input">
-            </div>
-
+        <div class="mb-4">
+            <label class="block text-gray-700 font-semibold">Enter Amount</label>
+            <input id="source-input" type="number" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
         </div>
 
-       <div class="bottom-button">
-        <button id="calculate-button">Calculate</button>
+        <div class="mb-4">
+            <label class="block text-gray-700 font-semibold">Target Country</label>
+            <div class="flex items-center space-x-2">
+                <select id="target-country" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <option value="">Select target</option>
+                </select>
+                <div id="target-img" class="w-10 h-10 bg-gray-200 rounded-sm"></div>
+            </div>
+        </div>
 
-       </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 font-semibold">Converted Amount</label>
+            <input id="target-input" type="text" class="w-full p-2 border rounded-md bg-gray-100" readonly>
+        </div>
 
+        <button id="calculate-button" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition">Calculate</button>
 
-
-
-
-
-
-
-
-
-
+        <div id="message-box" class="mt-4 text-center text-gray-700 font-semibold"></div>
     </div>
 
-    <div class="message">
-        <p id="message-box"></p>
-    </div>
-
-    <script src="./js/codes.js"></script>
-<script src="./js/index.js"></script>
+    <!-- Load JavaScript after the page content -->
+    <script src="./js/index.js" ></script>
 </body>
-
 </html>
